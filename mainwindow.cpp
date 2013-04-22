@@ -31,11 +31,23 @@ wchar_t fromCyrCom(unsigned char ch)
     const int cyr_A = 0x90-L'Р'+L'А';
 
     wchar_t wch = ch;
-    if (wch >= cyr_a && wch <= cyr_a + dist) {
+    if (wch >= cyr_a && wch <= cyr_a + dist)
         wch += L'а' - cyr_a;
-    } else if (ch >= cyr_A && ch <= cyr_A + dist) {
+    else if (wch >= cyr_A && wch <= cyr_A + dist)
         wch += L'А' - cyr_A;
-    }
+
+    return wch;
+}
+
+unsigned char toCyrCom(wchar_t wch)
+{
+    const int cyr_a = 0xA0;
+    const int cyr_A = 0x90-L'Р'+L'А';
+
+    if (wch >= L'а' && wch <= L'я')
+        wch += cyr_a - L'а';
+    else if (wch >= L'А' && wch <= L'Я')
+        wch += cyr_A - L'А';
 
     return wch;
 }
@@ -48,6 +60,14 @@ QString cyrComToUtf8(const QByteArray &text)
     return QString::fromStdWString(output);
 }
 
+QByteArray toCyrCom(const QString &text)
+{
+    QByteArray ret;
+    foreach (QChar ch, text)
+        ret.append(toCyrCom(ch.unicode()));
+    return ret;
+}
+
 void cyrComFileToUtf8File(const QString &fileName)
 {
     QFile file(fileName);
@@ -58,8 +78,24 @@ void cyrComFileToUtf8File(const QString &fileName)
     file.write(converted.toUtf8());
 }
 
+void utf8FileToCyrComFile(const QString &fileName)
+{
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QString converted = QString::fromUtf8(file.readAll());
+    file.close();
+    file.open(QIODevice::WriteOnly);
+    file.write(toCyrCom(converted));
+}
+
 void MainWindow::on_pushButton_3_clicked()
 {
     for (int ii = 0; ii < ui->listWidget->count(); ii++)
         cyrComFileToUtf8File(ui->listWidget->item(ii)->text());
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    for (int ii = 0; ii < ui->listWidget->count(); ii++)
+        utf8FileToCyrComFile(ui->listWidget->item(ii)->text());
 }
