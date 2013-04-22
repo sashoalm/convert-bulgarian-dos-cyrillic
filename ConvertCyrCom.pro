@@ -12,8 +12,9 @@ TARGET = ConvertCyrCom
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp\
+        mainwindow.cpp
 
-HEADERS  +=
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
