@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="1">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButtonRemoveFiles">
       <property name="text">
        <string>Remove files</string>
       </property>
@@ -39,24 +39,24 @@
      </spacer>
     </item>
     <item row="0" column="0" rowspan="5">
-     <widget class="QListWidget" name="listWidget"/>
+     <widget class="QListWidget" name="listWidgetFileNames"/>
     </item>
     <item row="0" column="1">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButtonAddFiles">
       <property name="text">
        <string>Add files</string>
       </property>
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pushButtonFromDos">
       <property name="text">
        <string>From DOS</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="pushButtonToDos">
       <property name="text">
        <string>To DOS</string>
       </property>
