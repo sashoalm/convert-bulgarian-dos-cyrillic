@@ -31,7 +31,7 @@ void MainWindow::on_pushButton_2_clicked()
     qDeleteAll(ui->listWidget->selectedItems());
 }
 
-wchar_t fromCyrCom(unsigned char ch)
+wchar_t dosCharToUnicode(unsigned char ch)
 {
     wchar_t wch = ch;
     if (wch >= dos_A && wch < dos_A + 2 * lettersCount)
@@ -40,57 +40,57 @@ wchar_t fromCyrCom(unsigned char ch)
     return wch;
 }
 
-unsigned char toCyrCom(wchar_t wch)
+unsigned char unicodeCharToDos(wchar_t wch)
 {
     if (wch >= unicode_A && wch < unicode_A + 2 * lettersCount)
         wch += dos_A - unicode_A;
     return wch;
 }
 
-QString cyrComToUtf8(const QByteArray &text)
+QString dosTextToUnicode(const QByteArray &text)
 {
     std::wstring output;
     foreach (unsigned char ch, text)
-        output += fromCyrCom(ch);
+        output += dosCharToUnicode(ch);
     return QString::fromStdWString(output);
 }
 
-QByteArray toCyrCom(const QString &text)
+QByteArray unicodeTextToDos(const QString &text)
 {
     QByteArray ret;
     foreach (QChar ch, text)
-        ret.append(toCyrCom(ch.unicode()));
+        ret.append(unicodeCharToDos(ch.unicode()));
     return ret;
 }
 
-void cyrComFileToUtf8File(const QString &fileName)
+void dosFileToUtf8(const QString &fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
-    QString converted = cyrComToUtf8(file.readAll());
+    QString converted = dosTextToUnicode(file.readAll());
     file.close();
     file.open(QIODevice::WriteOnly);
     file.write(converted.toUtf8());
 }
 
-void utf8FileToCyrComFile(const QString &fileName)
+void utf8FileToDos(const QString &fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
     QString converted = QString::fromUtf8(file.readAll());
     file.close();
     file.open(QIODevice::WriteOnly);
-    file.write(toCyrCom(converted));
+    file.write(unicodeTextToDos(converted));
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
     for (int ii = 0; ii < ui->listWidget->count(); ii++)
-        cyrComFileToUtf8File(ui->listWidget->item(ii)->text());
+        dosFileToUtf8(ui->listWidget->item(ii)->text());
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
     for (int ii = 0; ii < ui->listWidget->count(); ii++)
-        utf8FileToCyrComFile(ui->listWidget->item(ii)->text());
+        utf8FileToDos(ui->listWidget->item(ii)->text());
 }
