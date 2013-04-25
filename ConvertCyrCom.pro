@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    doscyrillic.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    doscyrillic.h
 
 FORMS    += mainwindow.ui
