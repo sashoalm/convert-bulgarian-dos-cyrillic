@@ -31,7 +31,8 @@ void MainWindow::on_pushButton_2_clicked()
     qDeleteAll(ui->listWidget->selectedItems());
 }
 
-wchar_t dosCharToUnicode(unsigned char ch)
+// Converts a single character from DOS Cyrillic encoding to Unicode.
+static wchar_t dosCharToUnicode(unsigned char ch)
 {
     wchar_t wch = ch;
     if (wch >= dos_A && wch < dos_A + 2 * lettersCount)
@@ -40,14 +41,16 @@ wchar_t dosCharToUnicode(unsigned char ch)
     return wch;
 }
 
-unsigned char unicodeCharToDos(wchar_t wch)
+// Converts a single character from Unicode to DOS Cyrillic encoding.
+static unsigned char unicodeCharToDos(wchar_t wch)
 {
     if (wch >= unicode_A && wch < unicode_A + 2 * lettersCount)
         wch += dos_A - unicode_A;
     return wch;
 }
 
-QString dosTextToUnicode(const QByteArray &text)
+// Converts a string from DOS Cyrillic encoding to Unicode.
+static QString dosTextToUnicode(const QByteArray &text)
 {
     std::wstring output;
     foreach (unsigned char ch, text)
@@ -55,7 +58,9 @@ QString dosTextToUnicode(const QByteArray &text)
     return QString::fromStdWString(output);
 }
 
-QByteArray unicodeTextToDos(const QString &text)
+// Converts a string from Unicode to DOS Cyrillic encoding.
+// Note that we don't append a zero terminator.
+static QByteArray unicodeTextToDos(const QString &text)
 {
     QByteArray ret;
     foreach (QChar ch, text)
@@ -63,7 +68,8 @@ QByteArray unicodeTextToDos(const QString &text)
     return ret;
 }
 
-void dosFileToUtf8(const QString &fileName)
+// Converts a file from DOS Cyrillic encoding to UTF-8.
+static void dosFileToUtf8(const QString &fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
@@ -73,7 +79,8 @@ void dosFileToUtf8(const QString &fileName)
     file.write(converted.toUtf8());
 }
 
-void utf8FileToDos(const QString &fileName)
+// Converts a file from UTF-8 to DOS Cyrillic encoding.
+static void utf8FileToDos(const QString &fileName)
 {
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
