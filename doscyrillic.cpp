@@ -39,8 +39,9 @@ static QString dosTextToUnicode(const QByteArray &text)
     return QString::fromStdWString(output);
 }
 
-// Converts a string from Unicode to DOS Cyrillic encoding.
-// Note that we don't append a zero terminator.
+// Converts a string from Unicode to DOS Cyrillic encoding. Note that we don't
+// append a zero terminator. But since we only write it to a file, it is not
+// needed.
 static QByteArray unicodeTextToDos(const QString &text)
 {
     QByteArray ret;
