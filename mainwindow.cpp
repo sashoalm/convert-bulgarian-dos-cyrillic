@@ -2,6 +2,13 @@
 #include "ui_mainwindow.h"
 #include <QtGui/QFileDialog>
 
+// There are 32 letters (it is actually the russian alphabet it seems).
+static const int lettersCount = 32;
+// The Unicode code of the Cyrillic A.
+static const int unicode_A = 1040;
+// The DOS code of the Cyrillic A.
+static const int dos_A = 128;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -26,29 +33,17 @@ void MainWindow::on_pushButton_2_clicked()
 
 wchar_t fromCyrCom(unsigned char ch)
 {
-    const int cyr_a = 0xA0;
-    const int dist = L'Я'-L'А';
-    const int cyr_A = 0x90-L'Р'+L'А';
-
     wchar_t wch = ch;
-    if (wch >= cyr_a && wch <= cyr_a + dist)
-        wch += L'а' - cyr_a;
-    else if (wch >= cyr_A && wch <= cyr_A + dist)
-        wch += L'А' - cyr_A;
+    if (wch >= dos_A && wch < dos_A + 2 * lettersCount)
+        wch += unicode_A - dos_A;
 
     return wch;
 }
 
 unsigned char toCyrCom(wchar_t wch)
 {
-    const int cyr_a = 0xA0;
-    const int cyr_A = 0x90-L'Р'+L'А';
-
-    if (wch >= L'а' && wch <= L'я')
-        wch += cyr_a - L'а';
-    else if (wch >= L'А' && wch <= L'Я')
-        wch += cyr_A - L'А';
-
+    if (wch >= unicode_A && wch < unicode_A + 2 * lettersCount)
+        wch += dos_A - unicode_A;
     return wch;
 }
 
