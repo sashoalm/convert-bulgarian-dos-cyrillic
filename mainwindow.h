@@ -26,6 +26,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+    void addFileName(const QString &fileName);
+    QString getFileName(int index);
 };
 
 #endif // MAINWINDOW_H
